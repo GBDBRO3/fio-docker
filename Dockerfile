@@ -1,9 +1,12 @@
-FROM alpine:3.10.1
+FROM alpine:3.13
 
-RUN apk add --no-cache fio==3.13-r1
-
-COPY jobs /jobs
 VOLUME /data
+COPY jobs /jobs
+RUN apk add --no-cache fio==3.25-r0 && \
+addgroup -S fio && adduser -S fio -G fio && \
+chown -R fio:fio /data
+
 WORKDIR /data
+USER 1001
 
 ENTRYPOINT [ "fio" ]
